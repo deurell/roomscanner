@@ -20,21 +20,29 @@ struct RoomCaptureViewRep : UIViewRepresentable
 
 struct ScanningView: View {
   @Environment(\.dismiss) private var dismiss
-  @StateObject var roomCaptureController = RoomCaptureController.instance
+  @StateObject var captureController = RoomCaptureController.instance
   
   var body: some View {
-    RoomCaptureViewRep()
-      .navigationBarBackButtonHidden(true)
-      .navigationBarItems(leading: Button("Cancel") {
-        roomCaptureController.stopSession()
-        dismiss()
-      })
-      .navigationBarItems(trailing: Button("Done") {
-        // done scanning
-        roomCaptureController.stopSession()
-      }).onAppear() {
-        roomCaptureController.startSession()
-      }
+    ZStack(alignment: .bottom) {
+      RoomCaptureViewRep()
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button("Cancel") {
+          captureController.stopSession()
+          dismiss()
+        })
+        .navigationBarItems(trailing: Button("Done") {
+          captureController.stopSession()
+          captureController.showExportButton = true
+        }).onAppear() {
+          captureController.showExportButton = false
+          captureController.startSession()
+        }
+      Button(action: {
+        captureController.export()
+      }, label: {
+        Text("Export").font(.title2)
+      }).buttonStyle(.borderedProminent).cornerRadius(40).opacity(captureController.showExportButton ? 1 : 0).padding()
+    }
   }
 }
 
@@ -45,13 +53,11 @@ struct ContentView: View {
         Image(systemName: "camera.metering.matrix")
           .imageScale(.large)
           .foregroundColor(.accentColor)
-        Text("Roomscanner").bold().font(.title)
+        Text("Roomscanner").font(.title)
         Spacer().frame(height: 40)
         Text("Scan the room by pointing the camera at all surfaces. Model export supports usdz and obj format.")
         Spacer().frame(height: 40)
-        NavigationLink(destination: ScanningView()) {
-          Text("Start scanning")
-        }.buttonStyle(.bordered)
+        NavigationLink(destination: ScanningView(), label: {Text("Start Scan")}).buttonStyle(.borderedProminent).cornerRadius(40).font(.title2)
       }
     }
   }

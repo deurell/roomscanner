@@ -8,17 +8,20 @@
 import Foundation
 import RoomPlan
 
-class RoomCaptureController : ObservableObject, RoomCaptureViewDelegate
+class RoomCaptureController : ObservableObject, RoomCaptureViewDelegate, RoomCaptureSessionDelegate
 {
   static var instance = RoomCaptureController()
   
   @Published var roomCaptureView: RoomCaptureView
+  @Published var showExportButton = false
   var sessionConfig: RoomCaptureSession.Configuration
   var finalResult: CapturedRoom?
   
   init() {
     roomCaptureView = RoomCaptureView(frame: CGRect(x: 0, y: 0, width: 42, height: 42))
     sessionConfig = RoomCaptureSession.Configuration()
+    roomCaptureView.captureSession.delegate = self
+    roomCaptureView.delegate = self
   }
   
   func startSession() {
@@ -35,7 +38,16 @@ class RoomCaptureController : ObservableObject, RoomCaptureViewDelegate
   
   func captureView(didPresent processedResult: CapturedRoom, error: Error?) {
     finalResult = processedResult
-    
+  }
+  
+  func export() {
+    let path = FileManager.default.temporaryDirectory.appending(path: "scan.usdz")
+    print(path)
+    do {
+      try finalResult?.export(to: path)
+    } catch {
+      print("Error exporting scan.")
+    }
   }
   
   required init?(coder: NSCoder) {
