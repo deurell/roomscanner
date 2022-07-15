@@ -14,8 +14,19 @@ struct RoomCaptureViewRep : UIViewRepresentable
     RoomCaptureController.instance.roomCaptureView
   }
   
-  func updateUIView(_ uiView: UIViewType, context: Context) {
+  func updateUIView(_ uiView: UIViewType, context: Context) {}
+}
+
+struct ActivityViewControllerRep: UIViewControllerRepresentable {
+  var items: [Any]
+  var activities: [UIActivity]? = nil
+  
+  func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityViewControllerRep>) -> UIActivityViewController {
+    let controller = UIActivityViewController(activityItems: items, applicationActivities: activities)
+    return controller
   }
+  
+  func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ActivityViewControllerRep>) {}
 }
 
 struct ScanningView: View {
@@ -33,15 +44,18 @@ struct ScanningView: View {
         .navigationBarItems(trailing: Button("Done") {
           captureController.stopSession()
           captureController.showExportButton = true
-        }).onAppear() {
+        }.opacity(captureController.showExportButton ? 0 : 1)).onAppear() {
           captureController.showExportButton = false
           captureController.startSession()
         }
       Button(action: {
         captureController.export()
+        dismiss()
       }, label: {
         Text("Export").font(.title2)
-      }).buttonStyle(.borderedProminent).cornerRadius(40).opacity(captureController.showExportButton ? 1 : 0).padding()
+      }).buttonStyle(.borderedProminent).cornerRadius(40).opacity(captureController.showExportButton ? 1 : 0).padding().sheet(isPresented: $captureController.showShareSheet, content:{
+        ActivityViewControllerRep(items: [captureController.exportUrl!])
+      })
     }
   }
 }

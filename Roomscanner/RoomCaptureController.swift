@@ -14,6 +14,9 @@ class RoomCaptureController : ObservableObject, RoomCaptureViewDelegate, RoomCap
   
   @Published var roomCaptureView: RoomCaptureView
   @Published var showExportButton = false
+  @Published var showShareSheet = false
+  @Published var exportUrl: URL?
+  
   var sessionConfig: RoomCaptureSession.Configuration
   var finalResult: CapturedRoom?
   
@@ -41,13 +44,14 @@ class RoomCaptureController : ObservableObject, RoomCaptureViewDelegate, RoomCap
   }
   
   func export() {
-    let path = FileManager.default.temporaryDirectory.appending(path: "scan.usdz")
-    print(path)
+    exportUrl = FileManager.default.temporaryDirectory.appending(path: "scan.usdz")
     do {
-      try finalResult?.export(to: path)
+      try finalResult?.export(to: exportUrl!)
     } catch {
-      print("Error exporting scan.")
+      print("Error exporting usdz scan.")
+      return
     }
+    showShareSheet = true
   }
   
   required init?(coder: NSCoder) {
