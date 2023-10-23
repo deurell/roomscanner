@@ -8,10 +8,9 @@
 import SwiftUI
 import RoomPlan
 
-/// Wrap 
 struct CaptureView : UIViewRepresentable
 {
-  @EnvironmentObject var captureController: RoomCaptureController
+  @Environment(RoomCaptureController.self) private var captureController
 
   func makeUIView(context: Context) -> some UIView {
     captureController.roomCaptureView
@@ -34,9 +33,12 @@ struct ActivityView: UIViewControllerRepresentable {
 
 struct ScanningView: View {
   @Environment(\.presentationMode) var presentationMode
-  @EnvironmentObject var captureController: RoomCaptureController
+  @Environment(RoomCaptureController.self) private var captureController
+  
   
   var body: some View {
+    @Bindable var bindableController = captureController
+    
     ZStack(alignment: .bottom) {
       CaptureView()
         .navigationBarBackButtonHidden(true)
@@ -55,11 +57,15 @@ struct ScanningView: View {
         captureController.export()
       }, label: {
         Text("Export").font(.title2)
-      }).buttonStyle(.borderedProminent).cornerRadius(40).opacity(captureController.showExportButton ? 1 : 0).padding().sheet(isPresented: $captureController.showShareSheet, content:{
-        ActivityView(items: [captureController.exportUrl!]).onDisappear() {
-          presentationMode.wrappedValue.dismiss()
-        }
-      })
+      }).buttonStyle(.borderedProminent)
+        .cornerRadius(40)
+        .opacity(captureController.showExportButton ? 1 : 0)
+        .padding()
+        .sheet(isPresented: $bindableController.showShareSheet, content:{
+          ActivityView(items: [captureController.exportUrl!]).onDisappear() {
+            presentationMode.wrappedValue.dismiss()
+          }
+        })
     }
   }
 }
