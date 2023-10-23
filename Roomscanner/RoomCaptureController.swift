@@ -1,5 +1,5 @@
 //
-//  RoomCaptureModel.swift
+//  RoomCaptureController.swift
 //  Roomscanner
 //
 //  Created by Mikael Deurell on 2022-07-14.
@@ -7,15 +7,15 @@
 
 import Foundation
 import RoomPlan
+import Observation
 
-class RoomCaptureController : ObservableObject, RoomCaptureViewDelegate, RoomCaptureSessionDelegate
+@Observable 
+class RoomCaptureController: RoomCaptureViewDelegate, RoomCaptureSessionDelegate, ObservableObject
 {
-  static var instance = RoomCaptureController()
-  
-  @Published var roomCaptureView: RoomCaptureView
-  @Published var showExportButton = false
-  @Published var showShareSheet = false
-  @Published var exportUrl: URL?
+  var roomCaptureView: RoomCaptureView
+  var showExportButton = false
+  var showShareSheet = false
+  var exportUrl: URL?
   
   var sessionConfig: RoomCaptureSession.Configuration
   var finalResult: CapturedRoom?

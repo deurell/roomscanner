@@ -14,6 +14,20 @@
 		CF79BA60287FFDF200979CF2 /* RoomCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF79BA5F287FFDF200979CF2 /* RoomCaptureController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		73586F352A8E28F000AFCB49 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = file.bplist;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# builtin-copyPlist\n";
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXFileReference section */
 		CF79BA4E287EC88400979CF2 /* Roomscanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roomscanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF79BA51287EC88400979CF2 /* RoomscannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomscannerApp.swift; sourceTree = "<group>"; };
@@ -21,7 +35,6 @@
 		CF79BA55287EC88500979CF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CF79BA58287EC88500979CF2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CF79BA5F287FFDF200979CF2 /* RoomCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCaptureController.swift; sourceTree = "<group>"; };
-		CF79BA61288017FA00979CF2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +67,6 @@
 		CF79BA50287EC88400979CF2 /* Roomscanner */ = {
 			isa = PBXGroup;
 			children = (
-				CF79BA61288017FA00979CF2 /* Info.plist */,
 				CF79BA5F287FFDF200979CF2 /* RoomCaptureController.swift */,
 				CF79BA51287EC88400979CF2 /* RoomscannerApp.swift */,
 				CF79BA53287EC88400979CF2 /* ContentView.swift */,
@@ -84,6 +96,7 @@
 				CF79BA4C287EC88400979CF2 /* Resources */,
 			);
 			buildRules = (
+				73586F352A8E28F000AFCB49 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -201,7 +214,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -255,7 +268,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -277,7 +290,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Roomscanner/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "needed to use roomplan api";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Needed for AR";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -308,7 +321,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Roomscanner/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "needed to use roomplan api";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Needed for AR";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -8,38 +8,41 @@
 import SwiftUI
 import RoomPlan
 
-struct RoomCaptureViewRep : UIViewRepresentable
+/// Wrap 
+struct CaptureView : UIViewRepresentable
 {
+  @EnvironmentObject var captureController: RoomCaptureController
+
   func makeUIView(context: Context) -> some UIView {
-    RoomCaptureController.instance.roomCaptureView
+    captureController.roomCaptureView
   }
   
   func updateUIView(_ uiView: UIViewType, context: Context) {}
 }
 
-struct ActivityViewControllerRep: UIViewControllerRepresentable {
+struct ActivityView: UIViewControllerRepresentable {
   var items: [Any]
   var activities: [UIActivity]? = nil
   
-  func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityViewControllerRep>) -> UIActivityViewController {
+  func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityView>) -> UIActivityViewController {
     let controller = UIActivityViewController(activityItems: items, applicationActivities: activities)
     return controller
   }
   
-  func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ActivityViewControllerRep>) {}
+  func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ActivityView>) {}
 }
 
 struct ScanningView: View {
-  @Environment(\.dismiss) private var dismiss
-  @StateObject var captureController = RoomCaptureController.instance
+  @Environment(\.presentationMode) var presentationMode
+  @EnvironmentObject var captureController: RoomCaptureController
   
   var body: some View {
     ZStack(alignment: .bottom) {
-      RoomCaptureViewRep()
+      CaptureView()
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: Button("Cancel") {
           captureController.stopSession()
-          dismiss()
+          presentationMode.wrappedValue.dismiss()
         })
         .navigationBarItems(trailing: Button("Done") {
           captureController.stopSession()
@@ -50,11 +53,12 @@ struct ScanningView: View {
         }
       Button(action: {
         captureController.export()
-        dismiss()
       }, label: {
         Text("Export").font(.title2)
       }).buttonStyle(.borderedProminent).cornerRadius(40).opacity(captureController.showExportButton ? 1 : 0).padding().sheet(isPresented: $captureController.showShareSheet, content:{
-        ActivityViewControllerRep(items: [captureController.exportUrl!])
+        ActivityView(items: [captureController.exportUrl!]).onDisappear() {
+          presentationMode.wrappedValue.dismiss()
+        }
       })
     }
   }
@@ -69,7 +73,7 @@ struct ContentView: View {
           .foregroundColor(.accentColor)
         Text("Roomscanner").font(.title)
         Spacer().frame(height: 40)
-        Text("Scan the room by pointing the camera at all surfaces. Model export supports usdz and obj format.")
+        Text("Scan the room by pointing the camera at all surfaces. Model export supports usdz format.")
         Spacer().frame(height: 40)
         NavigationLink(destination: ScanningView(), label: {Text("Start Scan")}).buttonStyle(.borderedProminent).cornerRadius(40).font(.title2)
       }
