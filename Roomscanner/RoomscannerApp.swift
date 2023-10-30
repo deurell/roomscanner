@@ -9,10 +9,11 @@ import SwiftUI
 
 @main
 struct RoomscannerApp: App {
+  static let captureController = RoomCaptureController()
   var body: some Scene {
     WindowGroup {
       ContentView()
-        .environment(RoomCaptureController())
+        .environment(RoomscannerApp.captureController)
     }
   }
 }
